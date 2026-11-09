@@ -1,0 +1,196 @@
+▶ agendarCita (ScheduleAppointment)
+  ✖ agenda una cita válida y calcula la hora de fin (0.912007ms)
+  ✖ rechaza la cita si el veterinario ya está ocupado en ese horario (0.150227ms)
+  ✖ rechaza una cita con fecha en el pasado (2.940213ms)
+  ✖ rechaza una cita para una mascota no registrada (0.361866ms)
+  ✖ rechaza una cita con un veterinario inexistente (0.231217ms)
+  ✖ permite citas contiguas: el fin de una es el inicio de la otra (0.177418ms)
+  ✖ detecta el choque cuando la nueva cita envuelve por completo a una existente (0.197024ms)
+  ✖ permite agendar con otro veterinario a la misma hora (0.20354ms)
+  ✖ impide que la misma mascota tenga dos citas simultáneas con veterinarios distintos (0.27646ms)
+  ✖ rechaza duraciones fuera de 15 a 120 minutos o que no sean múltiplo de 15 (0.53583ms)
+  ✖ genera un enlace de videollamada cuando la cita es de telemedicina (0.177486ms)
+  ✖ publica el evento appointment.scheduled para que otros módulos reaccionen (0.130282ms)
+✖ agendarCita (ScheduleAppointment) (7.45788ms)
+ℹ tests 12
+ℹ suites 1
+ℹ pass 0
+ℹ fail 12
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 132.886315
+
+✖ failing tests:
+
+test at test/appointments/scheduleAppointment.test.ts:1:1727
+✖ agenda una cita válida y calcula la hora de fin (0.912007ms)
+  Error: No implementado (fase roja de TDD)
+      at ScheduleAppointment.execute (/home/claude/vetsync/backend/src/modules/appointments/application/scheduleAppointment.ts:30:11)
+      at TestContext.<anonymous> (/home/claude/vetsync/backend/test/appointments/scheduleAppointment.test.ts:61:39)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.start (node:internal/test_runner/test:944:17)
+      at node:internal/test_runner/test:1440:71
+      at node:internal/per_context/primordials:466:82
+      at new Promise (<anonymous>)
+      at new SafePromise (node:internal/per_context/primordials:435:3)
+      at node:internal/per_context/primordials:466:9
+
+test at test/appointments/scheduleAppointment.test.ts:1:2117
+✖ rechaza la cita si el veterinario ya está ocupado en ese horario (0.150227ms)
+  Error: No implementado (fase roja de TDD)
+      at ScheduleAppointment.execute (/home/claude/vetsync/backend/src/modules/appointments/application/scheduleAppointment.ts:30:11)
+      at TestContext.<anonymous> (/home/claude/vetsync/backend/test/appointments/scheduleAppointment.test.ts:71:19)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Suite.processPendingSubtests (node:internal/test_runner/test:744:18)
+      at Test.postRun (node:internal/test_runner/test:1173:19)
+      at Test.run (node:internal/test_runner/test:1101:12)
+      at async Promise.all (index 0)
+      at async Suite.run (node:internal/test_runner/test:1442:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+
+test at test/appointments/scheduleAppointment.test.ts:1:2470
+✖ rechaza una cita con fecha en el pasado (2.940213ms)
+  AssertionError [ERR_ASSERTION]: Se esperaba ValidationError pero llegó Error: No implementado (fase roja de TDD)
+      at Object.<anonymous> (/home/claude/vetsync/backend/test/appointments/scheduleAppointment.test.ts:51:12)
+      at expectedException (node:assert:576:17)
+      at expectsError (node:assert:701:21)
+      at Function.rejects (node:assert:767:3)
+      at async TestContext.<anonymous> (/home/claude/vetsync/backend/test/appointments/scheduleAppointment.test.ts:82:5)
+      at async Test.run (node:internal/test_runner/test:1054:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:744:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at test/appointments/scheduleAppointment.test.ts:1:2697
+✖ rechaza una cita para una mascota no registrada (0.361866ms)
+  AssertionError [ERR_ASSERTION]: Se esperaba NotFoundError pero llegó Error: No implementado (fase roja de TDD)
+      at Object.<anonymous> (/home/claude/vetsync/backend/test/appointments/scheduleAppointment.test.ts:51:12)
+      at expectedException (node:assert:576:17)
+      at expectsError (node:assert:701:21)
+      at Function.rejects (node:assert:767:3)
+      at async TestContext.<anonymous> (/home/claude/vetsync/backend/test/appointments/scheduleAppointment.test.ts:91:5)
+      at async Test.run (node:internal/test_runner/test:1054:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:744:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at test/appointments/scheduleAppointment.test.ts:1:2905
+✖ rechaza una cita con un veterinario inexistente (0.231217ms)
+  AssertionError [ERR_ASSERTION]: Se esperaba NotFoundError pero llegó Error: No implementado (fase roja de TDD)
+      at Object.<anonymous> (/home/claude/vetsync/backend/test/appointments/scheduleAppointment.test.ts:51:12)
+      at expectedException (node:assert:576:17)
+      at expectsError (node:assert:701:21)
+      at Function.rejects (node:assert:767:3)
+      at async TestContext.<anonymous> (/home/claude/vetsync/backend/test/appointments/scheduleAppointment.test.ts:100:5)
+      at async Test.run (node:internal/test_runner/test:1054:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:744:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at test/appointments/scheduleAppointment.test.ts:1:3113
+✖ permite citas contiguas: el fin de una es el inicio de la otra (0.177418ms)
+  Error: No implementado (fase roja de TDD)
+      at ScheduleAppointment.execute (/home/claude/vetsync/backend/src/modules/appointments/application/scheduleAppointment.ts:30:11)
+      at TestContext.<anonymous> (/home/claude/vetsync/backend/test/appointments/scheduleAppointment.test.ts:109:19)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Suite.processPendingSubtests (node:internal/test_runner/test:744:18)
+      at Test.postRun (node:internal/test_runner/test:1173:19)
+      at Test.run (node:internal/test_runner/test:1101:12)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+
+test at test/appointments/scheduleAppointment.test.ts:1:3454
+✖ detecta el choque cuando la nueva cita envuelve por completo a una existente (0.197024ms)
+  Error: No implementado (fase roja de TDD)
+      at ScheduleAppointment.execute (/home/claude/vetsync/backend/src/modules/appointments/application/scheduleAppointment.ts:30:11)
+      at TestContext.<anonymous> (/home/claude/vetsync/backend/test/appointments/scheduleAppointment.test.ts:120:19)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Suite.processPendingSubtests (node:internal/test_runner/test:744:18)
+      at Test.postRun (node:internal/test_runner/test:1173:19)
+      at Test.run (node:internal/test_runner/test:1101:12)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+
+test at test/appointments/scheduleAppointment.test.ts:1:3835
+✖ permite agendar con otro veterinario a la misma hora (0.20354ms)
+  Error: No implementado (fase roja de TDD)
+      at ScheduleAppointment.execute (/home/claude/vetsync/backend/src/modules/appointments/application/scheduleAppointment.ts:30:11)
+      at TestContext.<anonymous> (/home/claude/vetsync/backend/test/appointments/scheduleAppointment.test.ts:132:19)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Suite.processPendingSubtests (node:internal/test_runner/test:744:18)
+      at Test.postRun (node:internal/test_runner/test:1173:19)
+      at Test.run (node:internal/test_runner/test:1101:12)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+
+test at test/appointments/scheduleAppointment.test.ts:1:4083
+✖ impide que la misma mascota tenga dos citas simultáneas con veterinarios distintos (0.27646ms)
+  Error: No implementado (fase roja de TDD)
+      at ScheduleAppointment.execute (/home/claude/vetsync/backend/src/modules/appointments/application/scheduleAppointment.ts:30:11)
+      at TestContext.<anonymous> (/home/claude/vetsync/backend/test/appointments/scheduleAppointment.test.ts:141:19)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Suite.processPendingSubtests (node:internal/test_runner/test:744:18)
+      at Test.postRun (node:internal/test_runner/test:1173:19)
+      at Test.run (node:internal/test_runner/test:1101:12)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+
+test at test/appointments/scheduleAppointment.test.ts:1:4353
+✖ rechaza duraciones fuera de 15 a 120 minutos o que no sean múltiplo de 15 (0.53583ms)
+  AssertionError [ERR_ASSERTION]: Se esperaba ValidationError pero llegó Error: No implementado (fase roja de TDD)
+      at Object.<anonymous> (/home/claude/vetsync/backend/test/appointments/scheduleAppointment.test.ts:51:12)
+      at expectedException (node:assert:576:17)
+      at expectsError (node:assert:701:21)
+      at Function.rejects (node:assert:767:3)
+      at async TestContext.<anonymous> (/home/claude/vetsync/backend/test/appointments/scheduleAppointment.test.ts:153:7)
+      at async Test.run (node:internal/test_runner/test:1054:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:744:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at test/appointments/scheduleAppointment.test.ts:1:4691
+✖ genera un enlace de videollamada cuando la cita es de telemedicina (0.177486ms)
+  Error: No implementado (fase roja de TDD)
+      at ScheduleAppointment.execute (/home/claude/vetsync/backend/src/modules/appointments/application/scheduleAppointment.ts:30:11)
+      at TestContext.<anonymous> (/home/claude/vetsync/backend/test/appointments/scheduleAppointment.test.ts:164:39)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Suite.processPendingSubtests (node:internal/test_runner/test:744:18)
+      at Test.postRun (node:internal/test_runner/test:1173:19)
+      at Test.run (node:internal/test_runner/test:1101:12)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+
+test at test/appointments/scheduleAppointment.test.ts:1:4953
+✖ publica el evento appointment.scheduled para que otros módulos reaccionen (0.130282ms)
+  Error: No implementado (fase roja de TDD)
+      at ScheduleAppointment.execute (/home/claude/vetsync/backend/src/modules/appointments/application/scheduleAppointment.ts:30:11)
+      at TestContext.<anonymous> (/home/claude/vetsync/backend/test/appointments/scheduleAppointment.test.ts:172:39)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Suite.processPendingSubtests (node:internal/test_runner/test:744:18)
+      at Test.postRun (node:internal/test_runner/test:1173:19)
+      at Test.run (node:internal/test_runner/test:1101:12)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
