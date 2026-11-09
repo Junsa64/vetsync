@@ -51,10 +51,15 @@ telemedicina, publicación del evento y **dos solicitudes simultáneas**.
 | 4. Restricción técnica (modular, TDD, SOLID) | Arquitectura del monolito modular (límites, dominio puro, sin `any`, `Clock` inyectado) |
 | Capa HTTP | API HTTP (integración) · Middleware de errores · Datos de demostración |
 
-## Lo que no está probado (honestamente)
+## Verificación en CI (GitHub Actions)
 
-- **ESLint** no se pudo ejecutar en el entorno donde se generó el código (sin red para instalar paquetes); sus reglas
-  más sensibles se aproximaron con `tsc --verbatimModuleSyntax` y búsquedas. La CI lo corre en cada push.
-- La capa HTTP se probó localmente con un *shim* de Express (fuera del repositorio); la CI usa Express real.
-- El frontend se verificó compilándolo con esbuild y recorriéndolo en Chromium headless contra la API (capturas en
-  [`capturas/`](./capturas)); no tiene pruebas unitarias propias.
+En el entorno donde se generó el código no había red para instalar paquetes, así que ESLint, Express real y el
+build de Vite se aproximaron localmente (compilador con `--verbatimModuleSyntax`, un simulador de Express fuera del
+repositorio y un bundle con esbuild). **La primera corrida de la CI en GitHub los ejecutó de verdad y pasó**:
+ESLint sin errores, 59 / 59 pruebas con Express 5 real, cobertura sobre el umbral y `tsc && vite build` del frontend.
+
+La corrida dejó dos advertencias (`actions/checkout@v4` y `actions/setup-node@v4` usan Node 20, obsoleto en los
+runners de GitHub). Se actualizaron a v5 y se fijó el runner en `ubuntu-24.04`.
+
+El frontend no tiene pruebas unitarias propias: se verificó recorriéndolo en Chromium headless contra la API
+(capturas en [`capturas/`](./capturas)).

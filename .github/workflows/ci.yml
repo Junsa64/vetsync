@@ -1,5 +1,7 @@
 # CI de VetSync: en cada push y pull request a main corre linter, pruebas y cobertura.
 # La cobertura de líneas mínima es 80 %: por debajo, el job falla.
+# Acciones en v5 (Node 24; las v4 usan Node 20, ya obsoleto en GitHub) y runner fijo
+# en ubuntu-24.04 para que la migración de ubuntu-latest no cambie el entorno sin aviso.
 name: CI
 
 on:
@@ -18,14 +20,14 @@ concurrency:
 jobs:
   backend:
     name: Backend · lint, pruebas y cobertura ≥ 80 %
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     defaults:
       run:
         working-directory: backend
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
 
@@ -42,14 +44,14 @@ jobs:
 
   frontend:
     name: Frontend · tipos y build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     defaults:
       run:
         working-directory: frontend
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
 
