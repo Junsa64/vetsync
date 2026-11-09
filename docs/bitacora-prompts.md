@@ -1,12 +1,13 @@
 # Bitácora de prompts — VetSync
 
-**Alumno:** Julian Espinosa Llanos · **Materia:** Optativa I – Fundamentos de la IA en la Ingeniería de Software
+**Equipo 6:** Julian Espinosa Llanos, Alejandro Erro González, Christian Daniel Valencia Patrón, Paul Candelario Seañez Villalobos, Ricardo Orduño Camacho  
+**Materia:** Optativa I – Fundamentos de la IA en la Ingeniería de Software  
 **Repositorio:** https://github.com/Junsa64/vetsync
 **Herramienta en los 5 prompts:** Claude Opus 5.5 en claude.ai, en modo agente (con acceso a terminal y archivos, por lo que podía ejecutar las pruebas que escribía).
 
 ## Cómo se trabajó
 
-El alumno entregó el caso de uso, eligió el stack (Node + Express + React) y le dio a la IA el documento de la
+El equipo entregó el caso de uso, eligió el stack (Node + Express + React) y le dio a la IA el documento de la
 metodología, con la instrucción de seguirla. Los prompts de esta bitácora son los de ese documento, adaptados a VetSync,
 y la IA los ejecutó en modo agente. Cada resultado se pasó por tres filtros antes de aceptarse: **las pruebas** (sin una
 prueba que falle primero no hay implementación), **las reglas de `AGENTS.md`** y **la ejecución real** (renderizar el

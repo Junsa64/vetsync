@@ -103,4 +103,5 @@ Reglas que la IA debía respetar: [`AGENTS.md`](AGENTS.md).
 - El bloqueo contra agendamientos simultáneos protege una sola instancia del servidor; con varias, debe moverse a la base de datos (`SELECT … FOR UPDATE`).
 
 ---
-Julian Espinosa Llanos · Ingeniería en Software · ITSON
+**Equipo 6** — Julian Espinosa Llanos · Alejandro Erro González · Christian Daniel Valencia Patrón · Paul Candelario Seañez Villalobos · Ricardo Orduño Camacho  
+Ingeniería en Software · ITSON
