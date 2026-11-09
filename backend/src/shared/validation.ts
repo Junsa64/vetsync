@@ -66,3 +66,11 @@ export function requireOneOf<T extends string>(value: unknown, field: string, al
   }
   return match;
 }
+
+/** Asegura que el cuerpo de la petición sea un objeto plano. */
+export function asRecord(body: unknown): Record<string, unknown> {
+  if (typeof body !== 'object' || body === null || Array.isArray(body)) {
+    throw new ValidationError('INVALID_BODY', 'El cuerpo de la petición debe ser un objeto JSON.');
+  }
+  return body as Record<string, unknown>;
+}
