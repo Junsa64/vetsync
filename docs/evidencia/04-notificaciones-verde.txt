@@ -1,0 +1,73 @@
+▶ Cancelación y consultas de citas
+  ✔ cancelar libera el horario para otra mascota (1.566354ms)
+  ✔ no permite cancelar dos veces ni cancelar una cita inexistente (0.702601ms)
+  ✔ lista citas filtradas por veterinario y rango, ordenadas por hora (1.371409ms)
+  ✔ la API pública entrega solo citas programadas dentro de la ventana (0.623808ms)
+✔ Cancelación y consultas de citas (5.172101ms)
+▶ DTO de agendamiento
+  ✔ convierte el cuerpo HTTP en un comando tipado (0.25585ms)
+  ✔ rechaza modalidad desconocida, fecha inválida y duración no numérica (0.276318ms)
+✔ DTO de agendamiento (0.668263ms)
+▶ agendarCita (ScheduleAppointment)
+  ✔ agenda una cita válida y calcula la hora de fin (1.965434ms)
+  ✔ rechaza la cita si el veterinario ya está ocupado en ese horario (0.854542ms)
+  ✔ rechaza una cita con fecha en el pasado (0.193967ms)
+  ✔ rechaza una cita para una mascota no registrada (0.153932ms)
+  ✔ rechaza una cita con un veterinario inexistente (0.210787ms)
+  ✔ permite citas contiguas: el fin de una es el inicio de la otra (0.21964ms)
+  ✔ detecta el choque cuando la nueva cita envuelve por completo a una existente (0.298361ms)
+  ✔ permite agendar con otro veterinario a la misma hora (0.373894ms)
+  ✔ impide que la misma mascota tenga dos citas simultáneas con veterinarios distintos (0.347826ms)
+  ✔ rechaza duraciones fuera de 15 a 120 minutos o que no sean múltiplo de 15 (0.647667ms)
+  ✔ genera un enlace de videollamada cuando la cita es de telemedicina (0.236625ms)
+  ✔ publica el evento appointment.scheduled para que otros módulos reaccionen (0.152963ms)
+✔ agendarCita (ScheduleAppointment) (6.918777ms)
+(node:1287) ExperimentalWarning: The MockTimers API is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+▶ Recordatorios de citas próximas (correo simulado)
+  ✔ envía un recordatorio al dueño cuando la cita empieza dentro de las próximas 24 h (18.187471ms)
+  ✔ no envía recordatorios de citas que empiezan después de la ventana de 24 h (0.796469ms)
+  ✔ es idempotente: dos corridas seguidas envían un solo correo por cita (0.518975ms)
+  ✔ si el envío falla lo reporta, sigue con las demás y lo reintenta en la siguiente corrida (1.182854ms)
+  ✔ omite y reporta la cita cuando no encuentra el contacto del dueño (1.235812ms)
+  ✔ incluye el enlace de la videollamada cuando la cita es de telemedicina (0.4579ms)
+✔ Recordatorios de citas próximas (correo simulado) (23.371472ms)
+▶ Confirmación al agendar
+  ✔ envía un correo de confirmación cuando se publica appointment.scheduled (0.565988ms)
+  ✔ lanza un error (que el bus reporta) si no hay contacto para la mascota (0.547469ms)
+✔ Confirmación al agendar (1.305679ms)
+▶ Infraestructura de notificaciones
+  ✔ el correo simulado guarda los mensajes en una bandeja, del más nuevo al más viejo (0.439087ms)
+  ✔ el programador ejecuta los recordatorios periódicamente y se puede detener (9.564659ms)
+✔ Infraestructura de notificaciones (10.26014ms)
+▶ Registro de dueños
+  ✔ registra un dueño y normaliza el correo a minúsculas (1.091251ms)
+  ✔ rechaza un correo ya registrado (0.587135ms)
+  ✔ valida la entrada en el borde: correo inválido y nombre vacío (0.243151ms)
+✔ Registro de dueños (2.649068ms)
+▶ Registro de mascotas
+  ✔ registra una mascota de un dueño existente (0.439868ms)
+  ✔ rechaza una mascota cuyo dueño no existe (0.212704ms)
+  ✔ rechaza una fecha de nacimiento en el futuro (0.148773ms)
+✔ Registro de mascotas (0.983213ms)
+▶ Historial médico
+  ✔ agrega registros y devuelve el historial del más reciente al más antiguo (1.004139ms)
+  ✔ rechaza un registro para una mascota inexistente (0.268783ms)
+  ✔ no permite registrar consultas con fecha futura (0.231886ms)
+  ✔ getPetProfile lanza PET_NOT_FOUND si la mascota no existe (0.354399ms)
+✔ Historial médico (2.111515ms)
+▶ API pública del módulo de pacientes
+  ✔ expone solo existencia de mascota y contacto del dueño (1.572523ms)
+✔ API pública del módulo de pacientes (1.651114ms)
+▶ Veterinarios
+  ✔ registra un veterinario y lo expone por la API pública (0.956962ms)
+  ✔ rechaza correos duplicados y campos vacíos (0.680415ms)
+✔ Veterinarios (2.470723ms)
+ℹ tests 41
+ℹ suites 11
+ℹ pass 41
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 632.237026
