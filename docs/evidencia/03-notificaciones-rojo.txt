@@ -1,0 +1,82 @@
+▶ Cancelación y consultas de citas
+  ✔ cancelar libera el horario para otra mascota (1.237408ms)
+  ✔ no permite cancelar dos veces ni cancelar una cita inexistente (0.532366ms)
+  ✔ lista citas filtradas por veterinario y rango, ordenadas por hora (1.054753ms)
+  ✔ la API pública entrega solo citas programadas dentro de la ventana (0.58281ms)
+✔ Cancelación y consultas de citas (4.246747ms)
+▶ DTO de agendamiento
+  ✔ convierte el cuerpo HTTP en un comando tipado (0.258547ms)
+  ✔ rechaza modalidad desconocida, fecha inválida y duración no numérica (0.224303ms)
+✔ DTO de agendamiento (0.638053ms)
+▶ agendarCita (ScheduleAppointment)
+  ✔ agenda una cita válida y calcula la hora de fin (1.699525ms)
+  ✔ rechaza la cita si el veterinario ya está ocupado en ese horario (0.542636ms)
+  ✔ rechaza una cita con fecha en el pasado (0.16445ms)
+  ✔ rechaza una cita para una mascota no registrada (0.137792ms)
+  ✔ rechaza una cita con un veterinario inexistente (0.113658ms)
+  ✔ permite citas contiguas: el fin de una es el inicio de la otra (0.169884ms)
+  ✔ detecta el choque cuando la nueva cita envuelve por completo a una existente (0.245747ms)
+  ✔ permite agendar con otro veterinario a la misma hora (0.236547ms)
+  ✔ impide que la misma mascota tenga dos citas simultáneas con veterinarios distintos (0.254858ms)
+  ✔ rechaza duraciones fuera de 15 a 120 minutos o que no sean múltiplo de 15 (0.499585ms)
+  ✔ genera un enlace de videollamada cuando la cita es de telemedicina (0.217335ms)
+  ✔ publica el evento appointment.scheduled para que otros módulos reaccionen (0.124915ms)
+✔ agendarCita (ScheduleAppointment) (5.475668ms)
+node:internal/modules/esm/resolve:275
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/home/claude/vetsync/backend/src/modules/notifications/application/sendAppointmentReminders.js' imported from /home/claude/vetsync/backend/test/notifications/notifications.test.ts
+    at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+    at moduleResolve (node:internal/modules/esm/resolve:865:10)
+    at defaultResolve (node:internal/modules/esm/resolve:989:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:783:38)
+    at nextStep (node:internal/modules/customization_hooks:189:26)
+    at resolveBaseSync (file:///opt/npm-tools/node_modules/tsx/dist/register-C4vWVmug.mjs:2:10932)
+    at resolveDirectorySync (file:///opt/npm-tools/node_modules/tsx/dist/register-C4vWVmug.mjs:2:12238)
+    at resolveTsPathsSync (file:///opt/npm-tools/node_modules/tsx/dist/register-C4vWVmug.mjs:2:13445)
+    at resolve (file:///opt/npm-tools/node_modules/tsx/dist/register-C4vWVmug.mjs:2:15991) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///home/claude/vetsync/backend/src/modules/notifications/application/sendAppointmentReminders.js'
+}
+
+Node.js v22.23.4
+✖ test/notifications/notifications.test.ts (153.500485ms)
+▶ Registro de dueños
+  ✔ registra un dueño y normaliza el correo a minúsculas (1.128122ms)
+  ✔ rechaza un correo ya registrado (0.530854ms)
+  ✔ valida la entrada en el borde: correo inválido y nombre vacío (0.274126ms)
+✔ Registro de dueños (2.736928ms)
+▶ Registro de mascotas
+  ✔ registra una mascota de un dueño existente (0.370286ms)
+  ✔ rechaza una mascota cuyo dueño no existe (0.15976ms)
+  ✔ rechaza una fecha de nacimiento en el futuro (0.15501ms)
+✔ Registro de mascotas (0.938365ms)
+▶ Historial médico
+  ✔ agrega registros y devuelve el historial del más reciente al más antiguo (1.033205ms)
+  ✔ rechaza un registro para una mascota inexistente (0.24151ms)
+  ✔ no permite registrar consultas con fecha futura (0.224118ms)
+  ✔ getPetProfile lanza PET_NOT_FOUND si la mascota no existe (0.41533ms)
+✔ Historial médico (2.177436ms)
+▶ API pública del módulo de pacientes
+  ✔ expone solo existencia de mascota y contacto del dueño (1.257089ms)
+✔ API pública del módulo de pacientes (1.344497ms)
+▶ Veterinarios
+  ✔ registra un veterinario y lo expone por la API pública (1.202453ms)
+  ✔ rechaza correos duplicados y campos vacíos (0.774351ms)
+✔ Veterinarios (3.040922ms)
+ℹ tests 32
+ℹ suites 8
+ℹ pass 31
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 629.231207
+
+✖ failing tests:
+
+test at test/notifications/notifications.test.ts:1:1
+✖ test/notifications/notifications.test.ts (153.500485ms)
+  'test failed'
