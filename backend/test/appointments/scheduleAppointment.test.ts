@@ -4,6 +4,7 @@ import {
   ScheduleAppointment,
   type ScheduleAppointmentCommand,
 } from '../../src/modules/appointments/application/scheduleAppointment.js';
+import { createModalityHandlers } from '../../src/modules/appointments/application/modalityHandlers.js';
 import { InMemoryAppointmentRepository } from '../../src/modules/appointments/infrastructure/inMemoryAppointmentRepository.js';
 import { APPOINTMENT_SCHEDULED } from '../../src/modules/appointments/application/ports.js';
 import { ConflictError, NotFoundError, ValidationError } from '../../src/shared/errors.js';
@@ -26,7 +27,7 @@ function createSut() {
     repository,
     pets: new StubPetDirectory(new Set(['pet-firulais', 'pet-michi'])),
     vets: new StubVetDirectory(new Set(['vet-ana', 'vet-luis'])),
-    meetingRooms: new FakeMeetingRoomProvider(),
+    modalities: createModalityHandlers(new FakeMeetingRoomProvider()),
     clock: new FixedClock(NOW),
     ids: new SequentialIdGenerator('appt'),
     events: eventBus,

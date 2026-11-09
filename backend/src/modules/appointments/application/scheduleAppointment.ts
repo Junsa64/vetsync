@@ -3,11 +3,11 @@ import { ConflictError, NotFoundError, ValidationError } from '../../../shared/e
 import type { EventBus } from '../../../shared/eventBus.js';
 import type { IdGenerator } from '../../../shared/idGenerator.js';
 import { addMinutes, assertValidDuration, type Appointment, type AppointmentModality } from '../domain/appointment.js';
+import type { ModalityHandlers } from './modalityHandlers.js';
 import {
   APPOINTMENT_SCHEDULED,
   type AppointmentRepository,
   type AppointmentScheduledPayload,
-  type MeetingRoomProvider,
   type PetDirectory,
   type VetDirectory,
 } from './ports.js';
@@ -25,44 +25,25 @@ export interface ScheduleAppointmentDeps {
   repository: AppointmentRepository;
   pets: PetDirectory;
   vets: VetDirectory;
-  meetingRooms: MeetingRoomProvider;
+  modalities: ModalityHandlers;
   clock: Clock;
   ids: IdGenerator;
   events: EventBus;
 }
 
+/** Caso de uso "agendarCita": agenda evitando choques de horario del veterinario y de la mascota. */
 export class ScheduleAppointment {
   public constructor(private readonly deps: ScheduleAppointmentDeps) {}
 
   public async execute(command: ScheduleAppointmentCommand): Promise<Appointment> {
-    assertValidDuration(command.durationMinutes);
-
     const now = this.deps.clock.now();
-    if (command.startsAt.getTime() <= now.getTime()) {
-      throw new ValidationError('APPOINTMENT_IN_PAST', 'No se puede agendar una cita en el pasado.');
-    }
-
-    if (!(await this.deps.pets.exists(command.petId))) {
-      throw new NotFoundError('PET_NOT_FOUND', 'La mascota no está registrada.');
-    }
-    if (!(await this.deps.vets.exists(command.vetId))) {
-      throw new NotFoundError('VET_NOT_FOUND', 'El veterinario no existe.');
-    }
+    await this.assertSchedulable(command, now);
 
     const endsAt = addMinutes(command.startsAt, command.durationMinutes);
-
-    const vetClashes = await this.deps.repository.findActiveOverlappingForVet(command.vetId, command.startsAt, endsAt);
-    if (vetClashes.length > 0) {
-      throw new ConflictError('VET_BUSY', 'El veterinario ya tiene una cita en ese horario.');
-    }
-    const petClashes = await this.deps.repository.findActiveOverlappingForPet(command.petId, command.startsAt, endsAt);
-    if (petClashes.length > 0) {
-      throw new ConflictError('PET_BUSY', 'La mascota ya tiene otra cita en ese horario.');
-    }
+    await this.assertNoClashes(command, endsAt);
 
     const id = this.deps.ids.next();
-    const meetingUrl = command.modality === 'TELEMEDICINE' ? await this.deps.meetingRooms.createRoomUrl(id) : null;
-
+    const { meetingUrl } = await this.deps.modalities[command.modality].prepare(id);
     const appointment: Appointment = {
       id,
       petId: command.petId,
@@ -77,6 +58,34 @@ export class ScheduleAppointment {
     };
 
     await this.deps.repository.save(appointment);
+    await this.publishScheduled(appointment, now);
+    return appointment;
+  }
+
+  private async assertSchedulable(command: ScheduleAppointmentCommand, now: Date): Promise<void> {
+    assertValidDuration(command.durationMinutes);
+    if (command.startsAt.getTime() <= now.getTime()) {
+      throw new ValidationError('APPOINTMENT_IN_PAST', 'No se puede agendar una cita en el pasado.');
+    }
+    if (!(await this.deps.pets.exists(command.petId))) {
+      throw new NotFoundError('PET_NOT_FOUND', 'La mascota no está registrada.');
+    }
+    if (!(await this.deps.vets.exists(command.vetId))) {
+      throw new NotFoundError('VET_NOT_FOUND', 'El veterinario no existe.');
+    }
+  }
+
+  private async assertNoClashes(command: ScheduleAppointmentCommand, endsAt: Date): Promise<void> {
+    const { repository } = this.deps;
+    if ((await repository.findActiveOverlappingForVet(command.vetId, command.startsAt, endsAt)).length > 0) {
+      throw new ConflictError('VET_BUSY', 'El veterinario ya tiene una cita en ese horario.');
+    }
+    if ((await repository.findActiveOverlappingForPet(command.petId, command.startsAt, endsAt)).length > 0) {
+      throw new ConflictError('PET_BUSY', 'La mascota ya tiene otra cita en ese horario.');
+    }
+  }
+
+  private async publishScheduled(appointment: Appointment, now: Date): Promise<void> {
     await this.deps.events.publish<AppointmentScheduledPayload>({
       type: APPOINTMENT_SCHEDULED,
       occurredAt: now,
@@ -90,7 +99,5 @@ export class ScheduleAppointment {
         meetingUrl: appointment.meetingUrl,
       },
     });
-
-    return appointment;
   }
 }
