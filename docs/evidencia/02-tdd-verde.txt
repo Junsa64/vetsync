@@ -1,0 +1,22 @@
+▶ agendarCita (ScheduleAppointment)
+  ✔ agenda una cita válida y calcula la hora de fin (1.837608ms)
+  ✔ rechaza la cita si el veterinario ya está ocupado en ese horario (0.628331ms)
+  ✔ rechaza una cita con fecha en el pasado (0.173637ms)
+  ✔ rechaza una cita para una mascota no registrada (0.135215ms)
+  ✔ rechaza una cita con un veterinario inexistente (0.133675ms)
+  ✔ permite citas contiguas: el fin de una es el inicio de la otra (0.202468ms)
+  ✔ detecta el choque cuando la nueva cita envuelve por completo a una existente (0.366257ms)
+  ✔ permite agendar con otro veterinario a la misma hora (0.236806ms)
+  ✔ impide que la misma mascota tenga dos citas simultáneas con veterinarios distintos (0.291477ms)
+  ✔ rechaza duraciones fuera de 15 a 120 minutos o que no sean múltiplo de 15 (0.576931ms)
+  ✔ genera un enlace de videollamada cuando la cita es de telemedicina (0.208301ms)
+  ✔ publica el evento appointment.scheduled para que otros módulos reaccionen (0.136438ms)
+✔ agendarCita (ScheduleAppointment) (6.068828ms)
+ℹ tests 12
+ℹ suites 1
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 127.885806
