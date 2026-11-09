@@ -29,7 +29,8 @@ export function buildReminderEmail(data: AppointmentEmailData): EmailMessage {
     body: [
       `Hola ${data.contact.ownerName}:`,
       '',
-      `Te recordamos que ${data.contact.petName} tiene cita con ${data.vetName ?? FALLBACK_VET_NAME} el ${when}.`,
+      `Te recordamos que ${data.contact.petName} tiene cita con ${data.vetName ?? FALLBACK_VET_NAME}.`,
+      `Fecha y hora: ${when}`,
       locationLine(data.meetingUrl),
       '',
       '— VetSync',
@@ -47,7 +48,8 @@ export function buildConfirmationEmail(data: AppointmentEmailData): EmailMessage
     body: [
       `Hola ${data.contact.ownerName}:`,
       '',
-      `Agendamos la cita de ${data.contact.petName} con ${data.vetName ?? FALLBACK_VET_NAME} para el ${when}.`,
+      `Agendamos la cita de ${data.contact.petName} con ${data.vetName ?? FALLBACK_VET_NAME}.`,
+      `Fecha y hora: ${when}`,
       locationLine(data.meetingUrl),
       '',
       '— VetSync',

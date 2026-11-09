@@ -102,6 +102,8 @@ describe('Recordatorios de citas próximas (correo simulado)', () => {
     assert.match(email?.body ?? '', /Dra\. Ana López/);
     // 10:00 UTC = 03:00 en Hermosillo (UTC-7)
     assert.match(email?.body ?? '', /3:00/);
+    // "p.m."/"a.m." ya terminan en punto: no debe quedar ".."
+    assert.doesNotMatch(email?.body ?? '', /\.\./);
   });
 
   it('no envía recordatorios de citas que empiezan después de la ventana de 24 h', async () => {
