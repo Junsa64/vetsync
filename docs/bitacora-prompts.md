@@ -26,6 +26,8 @@ implementación.
 
 ## Prompt 1 — Diseño de arquitectura (Fase I.1)
 
+**Herramienta:** Claude Opus 5.5 (claude.ai, modo agente con terminal y archivos)
+
 **Prompt exacto:**
 
 > Actúa como un Arquitecto de Software Senior. Para el caso de uso 'VetSync', propón un esquema de base de datos
@@ -74,6 +76,8 @@ Además propuso: monolito modular con 4 módulos (`patients`, `vets`, `appointme
 
 ## Prompt 2 — Contexto del IDE: `AGENTS.md` (Fase I.2)
 
+**Herramienta:** Claude Opus 5.5 (claude.ai, modo agente con terminal y archivos)
+
 **Prompt exacto:**
 
 > Genera un archivo agents.md estricto para un proyecto en TypeScript. Incluye reglas para: nombrado de variables en
@@ -105,6 +109,8 @@ Además propuso: monolito modular con 4 módulos (`patients`, `vets`, `appointme
 ---
 
 ## Prompt 3 — TDD asistido: pruebas antes del código (Fase II.1)
+
+**Herramienta:** Claude Opus 5.5 (claude.ai, modo agente con terminal y archivos)
 
 **Prompt exacto:**
 
@@ -145,6 +151,8 @@ Resultado al correrlas: **0 de 12 pasan** (`docs/evidencia/01-tdd-rojo.txt`). De
 ---
 
 ## Prompt 4 — Refactorización SOLID (Fase II.3)
+
+**Herramienta:** Claude Opus 5.5 (claude.ai, modo agente con terminal y archivos)
 
 **Prompt exacto** (aplicado sobre `scheduleAppointment.ts` de la fase verde):
 
@@ -187,6 +195,8 @@ método (`execute()` de unas 60 líneas validaba, revisaba choques, construía, 
 ---
 
 ## Prompt 5 — Code review de seguridad y rendimiento (Fase III.1)
+
+**Herramienta:** Claude Opus 5.5 (claude.ai, modo agente con terminal y archivos)
 
 **Prompt exacto:**
 
