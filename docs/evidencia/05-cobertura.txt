@@ -1,0 +1,500 @@
+TAP version 13
+# Subtest: Cancelación y consultas de citas
+    # Subtest: cancelar libera el horario para otra mascota
+    ok 1 - cancelar libera el horario para otra mascota
+      ---
+      duration_ms: 2.868928
+      type: 'test'
+      ...
+    # Subtest: no permite cancelar dos veces ni cancelar una cita inexistente
+    ok 2 - no permite cancelar dos veces ni cancelar una cita inexistente
+      ---
+      duration_ms: 0.833713
+      type: 'test'
+      ...
+    # Subtest: lista citas filtradas por veterinario y rango, ordenadas por hora
+    ok 3 - lista citas filtradas por veterinario y rango, ordenadas por hora
+      ---
+      duration_ms: 1.439007
+      type: 'test'
+      ...
+    # Subtest: la API pública entrega solo citas programadas dentro de la ventana
+    ok 4 - la API pública entrega solo citas programadas dentro de la ventana
+      ---
+      duration_ms: 0.440062
+      type: 'test'
+      ...
+    1..4
+ok 1 - Cancelación y consultas de citas
+  ---
+  duration_ms: 6.61147
+  type: 'suite'
+  ...
+# Subtest: DTO de agendamiento
+    # Subtest: convierte el cuerpo HTTP en un comando tipado
+    ok 1 - convierte el cuerpo HTTP en un comando tipado
+      ---
+      duration_ms: 0.410239
+      type: 'test'
+      ...
+    # Subtest: rechaza modalidad desconocida, fecha inválida y duración no numérica
+    ok 2 - rechaza modalidad desconocida, fecha inválida y duración no numérica
+      ---
+      duration_ms: 0.570887
+      type: 'test'
+      ...
+    1..2
+ok 2 - DTO de agendamiento
+  ---
+  duration_ms: 1.306776
+  type: 'suite'
+  ...
+# Subtest: agendarCita (ScheduleAppointment)
+    # Subtest: agenda una cita válida y calcula la hora de fin
+    ok 1 - agenda una cita válida y calcula la hora de fin
+      ---
+      duration_ms: 2.694458
+      type: 'test'
+      ...
+    # Subtest: rechaza la cita si el veterinario ya está ocupado en ese horario
+    ok 2 - rechaza la cita si el veterinario ya está ocupado en ese horario
+      ---
+      duration_ms: 0.800993
+      type: 'test'
+      ...
+    # Subtest: rechaza una cita con fecha en el pasado
+    ok 3 - rechaza una cita con fecha en el pasado
+      ---
+      duration_ms: 0.198207
+      type: 'test'
+      ...
+    # Subtest: rechaza una cita para una mascota no registrada
+    ok 4 - rechaza una cita para una mascota no registrada
+      ---
+      duration_ms: 0.232168
+      type: 'test'
+      ...
+    # Subtest: rechaza una cita con un veterinario inexistente
+    ok 5 - rechaza una cita con un veterinario inexistente
+      ---
+      duration_ms: 0.161532
+      type: 'test'
+      ...
+    # Subtest: permite citas contiguas: el fin de una es el inicio de la otra
+    ok 6 - permite citas contiguas: el fin de una es el inicio de la otra
+      ---
+      duration_ms: 0.2278
+      type: 'test'
+      ...
+    # Subtest: detecta el choque cuando la nueva cita envuelve por completo a una existente
+    ok 7 - detecta el choque cuando la nueva cita envuelve por completo a una existente
+      ---
+      duration_ms: 1.245126
+      type: 'test'
+      ...
+    # Subtest: permite agendar con otro veterinario a la misma hora
+    ok 8 - permite agendar con otro veterinario a la misma hora
+      ---
+      duration_ms: 0.298049
+      type: 'test'
+      ...
+    # Subtest: impide que la misma mascota tenga dos citas simultáneas con veterinarios distintos
+    ok 9 - impide que la misma mascota tenga dos citas simultáneas con veterinarios distintos
+      ---
+      duration_ms: 0.268234
+      type: 'test'
+      ...
+    # Subtest: rechaza duraciones fuera de 15 a 120 minutos o que no sean múltiplo de 15
+    ok 10 - rechaza duraciones fuera de 15 a 120 minutos o que no sean múltiplo de 15
+      ---
+      duration_ms: 0.309118
+      type: 'test'
+      ...
+    # Subtest: genera un enlace de videollamada cuando la cita es de telemedicina
+    ok 11 - genera un enlace de videollamada cuando la cita es de telemedicina
+      ---
+      duration_ms: 0.180013
+      type: 'test'
+      ...
+    # Subtest: publica el evento appointment.scheduled para que otros módulos reaccionen
+    ok 12 - publica el evento appointment.scheduled para que otros módulos reaccionen
+      ---
+      duration_ms: 0.24036
+      type: 'test'
+      ...
+    1..12
+ok 3 - agendarCita (ScheduleAppointment)
+  ---
+  duration_ms: 8.053245
+  type: 'suite'
+  ...
+# Subtest: Arquitectura del monolito modular
+    # Subtest: un módulo solo importa de otro módulo a través de su public.ts
+    ok 1 - un módulo solo importa de otro módulo a través de su public.ts
+      ---
+      duration_ms: 4.495168
+      type: 'test'
+      ...
+    # Subtest: la capa de dominio no depende de aplicación, infraestructura ni Express
+    ok 2 - la capa de dominio no depende de aplicación, infraestructura ni Express
+      ---
+      duration_ms: 0.415847
+      type: 'test'
+      ...
+    # Subtest: dominio y aplicación no usan `new Date()` sin argumentos (se inyecta Clock)
+    ok 3 - dominio y aplicación no usan `new Date()` sin argumentos (se inyecta Clock)
+      ---
+      duration_ms: 0.637309
+      type: 'test'
+      ...
+    # Subtest: ningún archivo de src usa el tipo any
+    ok 4 - ningún archivo de src usa el tipo any
+      ---
+      duration_ms: 2.402196
+      type: 'test'
+      ...
+    1..4
+ok 4 - Arquitectura del monolito modular
+  ---
+  duration_ms: 9.389642
+  type: 'suite'
+  ...
+# Subtest: API HTTP de VetSync (integración)
+    # Subtest: GET /api/health responde ok
+    ok 1 - GET /api/health responde ok
+      ---
+      duration_ms: 48.421027
+      type: 'test'
+      ...
+    # Subtest: flujo completo: registrar, agendar, chocar, confirmar, recordar y cancelar
+    ok 2 - flujo completo: registrar, agendar, chocar, confirmar, recordar y cancelar
+      ---
+      duration_ms: 47.780297
+      type: 'test'
+      ...
+    # Subtest: historial médico vía HTTP y perfil de la mascota
+    ok 3 - historial médico vía HTTP y perfil de la mascota
+      ---
+      duration_ms: 11.698751
+      type: 'test'
+      ...
+    # Subtest: traduce errores a códigos HTTP: 400 validación, 404 inexistente, 400 JSON inválido, 404 ruta
+    ok 4 - traduce errores a códigos HTTP: 400 validación, 404 inexistente, 400 JSON inválido, 404 ruta
+      ---
+      duration_ms: 6.978099
+      type: 'test'
+      ...
+    1..4
+ok 5 - API HTTP de VetSync (integración)
+  ---
+  duration_ms: 121.521677
+  type: 'suite'
+  ...
+# Subtest: Middleware de errores
+    # Subtest: un error inesperado responde 500 genérico, sin stack, y se reporta
+    ok 1 - un error inesperado responde 500 genérico, sin stack, y se reporta
+      ---
+      duration_ms: 0.344337
+      type: 'test'
+      ...
+    # Subtest: un cuerpo demasiado grande responde 413
+    ok 2 - un cuerpo demasiado grande responde 413
+      ---
+      duration_ms: 0.106427
+      type: 'test'
+      ...
+    1..2
+ok 6 - Middleware de errores
+  ---
+  duration_ms: 0.555027
+  type: 'suite'
+  ...
+# Subtest: Datos de demostración
+    # Subtest: el seed carga veterinarios, mascotas y citas válidas sin choques
+    ok 1 - el seed carga veterinarios, mascotas y citas válidas sin choques
+      ---
+      duration_ms: 1.455393
+      type: 'test'
+      ...
+    1..1
+ok 7 - Datos de demostración
+  ---
+  duration_ms: 1.548328
+  type: 'suite'
+  ...
+# (node:2007) ExperimentalWarning: The MockTimers API is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: Recordatorios de citas próximas (correo simulado)
+    # Subtest: envía un recordatorio al dueño cuando la cita empieza dentro de las próximas 24 h
+    ok 1 - envía un recordatorio al dueño cuando la cita empieza dentro de las próximas 24 h
+      ---
+      duration_ms: 16.241441
+      type: 'test'
+      ...
+    # Subtest: no envía recordatorios de citas que empiezan después de la ventana de 24 h
+    ok 2 - no envía recordatorios de citas que empiezan después de la ventana de 24 h
+      ---
+      duration_ms: 0.185744
+      type: 'test'
+      ...
+    # Subtest: es idempotente: dos corridas seguidas envían un solo correo por cita
+    ok 3 - es idempotente: dos corridas seguidas envían un solo correo por cita
+      ---
+      duration_ms: 0.438976
+      type: 'test'
+      ...
+    # Subtest: si el envío falla lo reporta, sigue con las demás y lo reintenta en la siguiente corrida
+    ok 4 - si el envío falla lo reporta, sigue con las demás y lo reintenta en la siguiente corrida
+      ---
+      duration_ms: 0.645513
+      type: 'test'
+      ...
+    # Subtest: omite y reporta la cita cuando no encuentra el contacto del dueño
+    ok 5 - omite y reporta la cita cuando no encuentra el contacto del dueño
+      ---
+      duration_ms: 0.218404
+      type: 'test'
+      ...
+    # Subtest: incluye el enlace de la videollamada cuando la cita es de telemedicina
+    ok 6 - incluye el enlace de la videollamada cuando la cita es de telemedicina
+      ---
+      duration_ms: 0.26843
+      type: 'test'
+      ...
+    1..6
+ok 8 - Recordatorios de citas próximas (correo simulado)
+  ---
+  duration_ms: 19.010536
+  type: 'suite'
+  ...
+# Subtest: Confirmación al agendar
+    # Subtest: envía un correo de confirmación cuando se publica appointment.scheduled
+    ok 1 - envía un correo de confirmación cuando se publica appointment.scheduled
+      ---
+      duration_ms: 0.461517
+      type: 'test'
+      ...
+    # Subtest: lanza un error (que el bus reporta) si no hay contacto para la mascota
+    ok 2 - lanza un error (que el bus reporta) si no hay contacto para la mascota
+      ---
+      duration_ms: 1.370784
+      type: 'test'
+      ...
+    1..2
+ok 9 - Confirmación al agendar
+  ---
+  duration_ms: 1.955845
+  type: 'suite'
+  ...
+# Subtest: Infraestructura de notificaciones
+    # Subtest: el correo simulado guarda los mensajes en una bandeja, del más nuevo al más viejo
+    ok 1 - el correo simulado guarda los mensajes en una bandeja, del más nuevo al más viejo
+      ---
+      duration_ms: 0.554325
+      type: 'test'
+      ...
+    # Subtest: el programador ejecuta los recordatorios periódicamente y se puede detener
+    ok 2 - el programador ejecuta los recordatorios periódicamente y se puede detener
+      ---
+      duration_ms: 10.145865
+      type: 'test'
+      ...
+    1..2
+ok 10 - Infraestructura de notificaciones
+  ---
+  duration_ms: 10.880493
+  type: 'suite'
+  ...
+# Subtest: Registro de dueños
+    # Subtest: registra un dueño y normaliza el correo a minúsculas
+    ok 1 - registra un dueño y normaliza el correo a minúsculas
+      ---
+      duration_ms: 1.382707
+      type: 'test'
+      ...
+    # Subtest: rechaza un correo ya registrado
+    ok 2 - rechaza un correo ya registrado
+      ---
+      duration_ms: 0.713599
+      type: 'test'
+      ...
+    # Subtest: valida la entrada en el borde: correo inválido y nombre vacío
+    ok 3 - valida la entrada en el borde: correo inválido y nombre vacío
+      ---
+      duration_ms: 0.217053
+      type: 'test'
+      ...
+    1..3
+ok 11 - Registro de dueños
+  ---
+  duration_ms: 3.222004
+  type: 'suite'
+  ...
+# Subtest: Registro de mascotas
+    # Subtest: registra una mascota de un dueño existente
+    ok 1 - registra una mascota de un dueño existente
+      ---
+      duration_ms: 1.46517
+      type: 'test'
+      ...
+    # Subtest: rechaza una mascota cuyo dueño no existe
+    ok 2 - rechaza una mascota cuyo dueño no existe
+      ---
+      duration_ms: 0.184789
+      type: 'test'
+      ...
+    # Subtest: rechaza una fecha de nacimiento en el futuro
+    ok 3 - rechaza una fecha de nacimiento en el futuro
+      ---
+      duration_ms: 0.161416
+      type: 'test'
+      ...
+    1..3
+ok 12 - Registro de mascotas
+  ---
+  duration_ms: 1.941648
+  type: 'suite'
+  ...
+# Subtest: Historial médico
+    # Subtest: agrega registros y devuelve el historial del más reciente al más antiguo
+    ok 1 - agrega registros y devuelve el historial del más reciente al más antiguo
+      ---
+      duration_ms: 1.219091
+      type: 'test'
+      ...
+    # Subtest: rechaza un registro para una mascota inexistente
+    ok 2 - rechaza un registro para una mascota inexistente
+      ---
+      duration_ms: 0.232755
+      type: 'test'
+      ...
+    # Subtest: no permite registrar consultas con fecha futura
+    ok 3 - no permite registrar consultas con fecha futura
+      ---
+      duration_ms: 0.155578
+      type: 'test'
+      ...
+    # Subtest: getPetProfile lanza PET_NOT_FOUND si la mascota no existe
+    ok 4 - getPetProfile lanza PET_NOT_FOUND si la mascota no existe
+      ---
+      duration_ms: 0.131619
+      type: 'test'
+      ...
+    1..4
+ok 13 - Historial médico
+  ---
+  duration_ms: 1.872978
+  type: 'suite'
+  ...
+# Subtest: API pública del módulo de pacientes
+    # Subtest: expone solo existencia de mascota y contacto del dueño
+    ok 1 - expone solo existencia de mascota y contacto del dueño
+      ---
+      duration_ms: 0.361304
+      type: 'test'
+      ...
+    1..1
+ok 14 - API pública del módulo de pacientes
+  ---
+  duration_ms: 0.417463
+  type: 'suite'
+  ...
+# Subtest: Veterinarios
+    # Subtest: registra un veterinario y lo expone por la API pública
+    ok 1 - registra un veterinario y lo expone por la API pública
+      ---
+      duration_ms: 1.325504
+      type: 'test'
+      ...
+    # Subtest: rechaza correos duplicados y campos vacíos
+    ok 2 - rechaza correos duplicados y campos vacíos
+      ---
+      duration_ms: 0.77278
+      type: 'test'
+      ...
+    1..2
+ok 15 - Veterinarios
+  ---
+  duration_ms: 3.029898
+  type: 'suite'
+  ...
+1..15
+# tests 52
+# suites 15
+# pass 52
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1396.634641
+# start of coverage report
+# ---------------------------------------------------------------------------------------
+# file                                   | line % | branch % | funcs % | uncovered lines
+# ---------------------------------------------------------------------------------------
+# src                                    |        |          |         | 
+#  container.ts                          | 100.00 |    72.73 |   83.33 | 
+#  http                                  |        |          |         | 
+#   app.ts                               | 100.00 |   100.00 |  100.00 | 
+#   errorHandler.ts                      |  97.78 |    88.24 |  100.00 | 20
+#  modules                               |        |          |         | 
+#   appointments                         |        |          |         | 
+#    application                         |        |          |         | 
+#     appointmentQueries.ts              | 100.00 |   100.00 |  100.00 | 
+#     cancelAppointment.ts               | 100.00 |   100.00 |  100.00 | 
+#     dto.ts                             | 100.00 |   100.00 |  100.00 | 
+#     modalityHandlers.ts                | 100.00 |   100.00 |  100.00 | 
+#     ports.ts                           | 100.00 |   100.00 |  100.00 | 
+#     scheduleAppointment.ts             | 100.00 |   100.00 |  100.00 | 
+#    domain                              |        |          |         | 
+#     appointment.ts                     | 100.00 |   100.00 |  100.00 | 
+#    infrastructure                      |        |          |         | 
+#     http                               |        |          |         | 
+#      appointmentRoutes.ts              | 100.00 |    77.78 |  100.00 | 
+#     inMemoryAppointmentRepository.ts   | 100.00 |   100.00 |  100.00 | 
+#     simulatedMeetingRoomProvider.ts    | 100.00 |   100.00 |  100.00 | 
+#    public.ts                           | 100.00 |   100.00 |  100.00 | 
+#   notifications                        |        |          |         | 
+#    application                         |        |          |         | 
+#     sendAppointmentConfirmation.ts     | 100.00 |   100.00 |  100.00 | 
+#     sendAppointmentReminders.ts        | 100.00 |   100.00 |  100.00 | 
+#    domain                              |        |          |         | 
+#     emailTemplates.ts                  | 100.00 |    90.00 |  100.00 | 
+#    infrastructure                      |        |          |         | 
+#     http                               |        |          |         | 
+#      notificationRoutes.ts             | 100.00 |    71.43 |  100.00 | 
+#     inMemorySentReminderRepository.ts  | 100.00 |   100.00 |  100.00 | 
+#     reminderScheduler.ts               | 100.00 |   100.00 |  100.00 | 
+#     simulatedEmailSender.ts            | 100.00 |   100.00 |  100.00 | 
+#   patients                             |        |          |         | 
+#    application                         |        |          |         | 
+#     addMedicalRecord.ts                | 100.00 |   100.00 |  100.00 | 
+#     dto.ts                             | 100.00 |   100.00 |  100.00 | 
+#     patientQueries.ts                  |  95.12 |    90.91 |  100.00 | 20-21
+#     registerOwner.ts                   | 100.00 |   100.00 |  100.00 | 
+#     registerPet.ts                     | 100.00 |   100.00 |  100.00 | 
+#    infrastructure                      |        |          |         | 
+#     http                               |        |          |         | 
+#      patientRoutes.ts                  | 100.00 |    72.22 |  100.00 | 
+#     inMemoryPatientRepositories.ts     | 100.00 |   100.00 |  100.00 | 
+#    public.ts                           | 100.00 |    87.50 |  100.00 | 
+#   vets                                 |        |          |         | 
+#    application                         |        |          |         | 
+#     dto.ts                             | 100.00 |   100.00 |  100.00 | 
+#     registerVet.ts                     | 100.00 |   100.00 |  100.00 | 
+#     vetQueries.ts                      | 100.00 |   100.00 |  100.00 | 
+#    infrastructure                      |        |          |         | 
+#     http                               |        |          |         | 
+#      vetRoutes.ts                      |  96.15 |    71.43 |  100.00 | 10
+#     inMemoryVetRepository.ts           | 100.00 |   100.00 |  100.00 | 
+#    public.ts                           | 100.00 |   100.00 |  100.00 | 
+#  seed.ts                               | 100.00 |   100.00 |  100.00 | 
+#  shared                                |        |          |         | 
+#   clock.ts                             | 100.00 |   100.00 |   66.67 | 
+#   errors.ts                            | 100.00 |   100.00 |  100.00 | 
+#   eventBus.ts                          |  96.08 |    80.00 |   87.50 | 8-9
+#   idGenerator.ts                       | 100.00 |   100.00 |  100.00 | 
+#   validation.ts                        |  93.42 |    89.19 |  100.00 | 10 29 31-33
+# ---------------------------------------------------------------------------------------
+# all files                              |  99.34 |    94.20 |   98.82 | 
+# ---------------------------------------------------------------------------------------
+# end of coverage report
