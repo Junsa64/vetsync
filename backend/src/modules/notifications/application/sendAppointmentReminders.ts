@@ -5,6 +5,7 @@ import type {
   AppointmentFeed,
   ContactDirectory,
   EmailSender,
+  PetContact,
   ReminderCandidate,
   SentReminderRepository,
   VetNames,
@@ -31,6 +32,19 @@ export interface SendAppointmentRemindersDeps {
 
 type Outcome = keyof ReminderRunResult;
 
+interface RunLookups {
+  contacts: Map<string, Promise<PetContact | null>>;
+  vetNames: Map<string, Promise<string | null>>;
+}
+
+function memo<T>(cache: Map<string, Promise<T>>, key: string, load: () => Promise<T>): Promise<T> {
+  const cached = cache.get(key);
+  if (cached) return cached;
+  const pending = load();
+  cache.set(key, pending);
+  return pending;
+}
+
 export class SendAppointmentReminders {
   public constructor(private readonly deps: SendAppointmentRemindersDeps) {}
 
@@ -39,25 +53,29 @@ export class SendAppointmentReminders {
     const windowEnd = new Date(now.getTime() + this.deps.leadTimeMinutes * 60_000);
     const candidates = await this.deps.feed.findScheduledStartingBetween(now, windowEnd);
 
+    // Caché por corrida: evita consultas N+1 cuando varias citas comparten veterinario o mascota.
+    const lookups: RunLookups = { contacts: new Map(), vetNames: new Map() };
     const result: ReminderRunResult = { sent: 0, skipped: 0, failed: 0 };
     for (const candidate of candidates) {
-      const outcome = await this.remind(candidate, now);
+      const outcome = await this.remind(candidate, now, lookups);
       result[outcome] += 1;
     }
     return result;
   }
 
   /** Un fallo en una cita no detiene el resto: se reporta y se reintenta en la siguiente corrida. */
-  private async remind(candidate: ReminderCandidate, now: Date): Promise<Outcome> {
+  private async remind(candidate: ReminderCandidate, now: Date, lookups: RunLookups): Promise<Outcome> {
     try {
       if (await this.deps.sentReminders.wasSent(candidate.appointmentId)) {
         return 'skipped';
       }
-      const contact = await this.deps.contacts.getContactForPet(candidate.petId);
+      const contact = await memo(lookups.contacts, candidate.petId, () =>
+        this.deps.contacts.getContactForPet(candidate.petId),
+      );
       if (!contact) {
         throw new Error(`Cita ${candidate.appointmentId} sin contacto para la mascota ${candidate.petId}`);
       }
-      const vetName = await this.deps.vetNames.getVetName(candidate.vetId);
+      const vetName = await memo(lookups.vetNames, candidate.vetId, () => this.deps.vetNames.getVetName(candidate.vetId));
       await this.deps.mailer.send(
         buildReminderEmail({
           appointmentId: candidate.appointmentId,

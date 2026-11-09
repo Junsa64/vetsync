@@ -7,6 +7,7 @@ import { parseAppointmentFilter, parseScheduleAppointment } from '../../src/modu
 import { createModalityHandlers } from '../../src/modules/appointments/application/modalityHandlers.js';
 import { InMemoryAppointmentRepository } from '../../src/modules/appointments/infrastructure/inMemoryAppointmentRepository.js';
 import { createAppointmentsPublicApi } from '../../src/modules/appointments/public.js';
+import { KeyedMutex } from '../../src/shared/keyedMutex.js';
 import { ConflictError, NotFoundError, ValidationError } from '../../src/shared/errors.js';
 import {
   FakeMeetingRoomProvider,
@@ -28,6 +29,7 @@ function createSut() {
     clock: new FixedClock(at('2026-11-10T15:00:00Z')),
     ids: new SequentialIdGenerator('appt'),
     events: new RecordingEventBus(),
+      locks: new KeyedMutex(),
   });
   return {
     repository,

@@ -6,6 +6,8 @@ export interface SimulatedEmailSenderDeps {
   clock: Clock;
   ids: IdGenerator;
   log: (line: string) => void;
+  /** Máximo de correos en memoria; los más viejos se descartan (evita crecimiento sin límite). */
+  maxStored?: number;
 }
 
 /**
@@ -21,6 +23,10 @@ export class SimulatedEmailSender implements EmailSender, EmailOutbox {
   public async send(message: EmailMessage): Promise<void> {
     const sent: SentEmail = { ...message, id: this.deps.ids.next(), sentAt: this.deps.clock.now() };
     this.outbox.push(sent);
+    const limit = this.deps.maxStored ?? 500;
+    if (this.outbox.length > limit) {
+      this.outbox.splice(0, this.outbox.length - limit);
+    }
     this.deps.log(`[correo simulado] ${sent.kind} → ${sent.to} | ${sent.subject}`);
   }
 

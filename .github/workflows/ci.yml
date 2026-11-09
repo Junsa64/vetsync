@@ -1,0 +1,60 @@
+# CI de VetSync: en cada push y pull request a main corre linter, pruebas y cobertura.
+# La cobertura de líneas mínima es 80 %: por debajo, el job falla.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    name: Backend · lint, pruebas y cobertura ≥ 80 %
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # `npm install` y no `npm ci`: funciona aunque todavía no exista package-lock.json.
+      # Cuando el lockfile esté en el repo, cambiar a `npm ci` para builds reproducibles.
+      - name: Instalar dependencias
+        run: npm install --no-audit --no-fund
+
+      - name: Linter (ESLint + verificación de tipos)
+        run: npm run lint
+
+      - name: Pruebas unitarias e integración con umbral de cobertura
+        run: npm run test:coverage
+
+  frontend:
+    name: Frontend · tipos y build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Instalar dependencias
+        run: npm install --no-audit --no-fund
+
+      - name: Verificar tipos y compilar
+        run: npm run build

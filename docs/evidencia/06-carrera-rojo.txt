@@ -1,0 +1,32 @@
+▶ agendarCita bajo concurrencia
+  ✖ dos solicitudes simultáneas por el mismo horario: solo una se agenda (3.134536ms)
+✖ agendarCita bajo concurrencia (3.903009ms)
+ℹ tests 1
+ℹ suites 1
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 145.215406
+
+✖ failing tests:
+
+test at test/appointments/concurrency.test.ts:1:640
+✖ dos solicitudes simultáneas por el mismo horario: solo una se agenda (3.134536ms)
+  AssertionError [ERR_ASSERTION]: exactamente una cita debe quedar agendada
+  
+  2 !== 1
+  
+      at TestContext.<anonymous> (/home/claude/vetsync/backend/test/appointments/concurrency.test.ts:39:12)
+      at async Test.run (node:internal/test_runner/test:1054:7)
+      at async Promise.all (index 0)
+      at async Suite.run (node:internal/test_runner/test:1442:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 2,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

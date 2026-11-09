@@ -7,6 +7,7 @@ import {
 import { createModalityHandlers } from '../../src/modules/appointments/application/modalityHandlers.js';
 import { InMemoryAppointmentRepository } from '../../src/modules/appointments/infrastructure/inMemoryAppointmentRepository.js';
 import { APPOINTMENT_SCHEDULED } from '../../src/modules/appointments/application/ports.js';
+import { KeyedMutex } from '../../src/shared/keyedMutex.js';
 import { ConflictError, NotFoundError, ValidationError } from '../../src/shared/errors.js';
 import {
   FakeMeetingRoomProvider,
@@ -31,6 +32,7 @@ function createSut() {
     clock: new FixedClock(NOW),
     ids: new SequentialIdGenerator('appt'),
     events: eventBus,
+    locks: new KeyedMutex(),
   });
   return { useCase, repository, eventBus };
 }

@@ -1,0 +1,11 @@
+▶ agendarCita bajo concurrencia
+  ✔ dos solicitudes simultáneas por el mismo horario: solo una se agenda (1.925735ms)
+✔ agendarCita bajo concurrencia (2.693881ms)
+ℹ tests 1
+ℹ suites 1
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 154.948584

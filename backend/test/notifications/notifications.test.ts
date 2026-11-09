@@ -163,6 +163,45 @@ describe('Recordatorios de citas próximas (correo simulado)', () => {
   });
 });
 
+describe('Rendimiento de los recordatorios', () => {
+  it('no hace consultas N+1: un veterinario y una mascota repetidos se consultan una sola vez por corrida', async () => {
+    let vetLookups = 0;
+    let contactLookups = 0;
+    const mailer = new RecordingMailer();
+    const useCase = new SendAppointmentReminders({
+      feed: new FakeFeed([
+        candidate({ appointmentId: 'a1' }),
+        candidate({ appointmentId: 'a2', startsAt: at('2026-11-11T11:00:00.000Z') }),
+        candidate({ appointmentId: 'a3', startsAt: at('2026-11-11T12:00:00.000Z') }),
+      ]),
+      contacts: {
+        async getContactForPet(petId: string) {
+          contactLookups += 1;
+          return contacts.getContactForPet(petId);
+        },
+      },
+      vetNames: {
+        async getVetName(vetId: string) {
+          vetLookups += 1;
+          return vetNames.getVetName(vetId);
+        },
+      },
+      mailer,
+      sentReminders: new InMemorySentReminderRepository(),
+      clock: new FixedClock(NOW),
+      errors: new RecordingReporter(),
+      leadTimeMinutes: 24 * 60,
+      timeZone: 'UTC',
+    });
+
+    const result = await useCase.execute();
+
+    assert.equal(result.sent, 3);
+    assert.equal(vetLookups, 1);
+    assert.equal(contactLookups, 1);
+  });
+});
+
 describe('Confirmación al agendar', () => {
   it('envía un correo de confirmación cuando se publica appointment.scheduled', async () => {
     const mailer = new RecordingMailer();
@@ -215,6 +254,16 @@ describe('Infraestructura de notificaciones', () => {
     assert.deepEqual(outbox.map((m) => m.subject), ['Dos', 'Uno']);
     assert.equal(outbox[0]?.id, 'mail-2');
     assert.equal(lines.length, 2);
+  });
+
+  it('la bandeja simulada no crece sin límite (descarta los correos más viejos)', async () => {
+    const sender = new SimulatedEmailSender({ clock: new FixedClock(NOW), ids: new SequentialIdGenerator('m'), log: () => undefined, maxStored: 2 });
+
+    for (const subject of ['1', '2', '3']) {
+      await sender.send({ to: 'a@b.mx', subject, body: '', kind: 'REMINDER', appointmentId: null });
+    }
+
+    assert.deepEqual((await sender.list()).map((m) => m.subject).sort(), ['2', '3']);
   });
 
   it('el programador ejecuta los recordatorios periódicamente y se puede detener', async () => {

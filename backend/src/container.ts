@@ -6,6 +6,7 @@
 import { SystemClock, type Clock } from './shared/clock.js';
 import { ConsoleErrorReporter, InMemoryEventBus, type ErrorReporter } from './shared/eventBus.js';
 import { UuidGenerator, type IdGenerator } from './shared/idGenerator.js';
+import { KeyedMutex } from './shared/keyedMutex.js';
 
 import { AddMedicalRecord } from './modules/patients/application/addMedicalRecord.js';
 import { PatientQueries } from './modules/patients/application/patientQueries.js';
@@ -91,6 +92,7 @@ export function buildContainer(options: ContainerOptions = {}) {
       clock,
       ids,
       events,
+      locks: new KeyedMutex(),
     }),
     cancel: new CancelAppointment({ repository: appointmentRepository }),
     queries: new AppointmentQueries({ repository: appointmentRepository }),
