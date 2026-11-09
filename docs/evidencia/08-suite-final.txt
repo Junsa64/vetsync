@@ -1,0 +1,107 @@
+▶ Cancelación y consultas de citas
+  ✔ cancelar libera el horario para otra mascota (2.229815ms)
+  ✔ no permite cancelar dos veces ni cancelar una cita inexistente (0.998555ms)
+  ✔ lista citas filtradas por veterinario y rango, ordenadas por hora (2.169574ms)
+  ✔ la API pública entrega solo citas programadas dentro de la ventana (2.021558ms)
+✔ Cancelación y consultas de citas (9.331329ms)
+▶ DTO de agendamiento
+  ✔ convierte el cuerpo HTTP en un comando tipado (0.337828ms)
+  ✔ rechaza modalidad desconocida, fecha inválida y duración no numérica (0.321546ms)
+✔ DTO de agendamiento (0.822135ms)
+▶ agendarCita bajo concurrencia
+  ✔ dos solicitudes simultáneas por el mismo horario: solo una se agenda (2.435839ms)
+✔ agendarCita bajo concurrencia (3.550687ms)
+▶ agendarCita (ScheduleAppointment)
+  ✔ agenda una cita válida y calcula la hora de fin (3.033214ms)
+  ✔ rechaza la cita si el veterinario ya está ocupado en ese horario (1.06991ms)
+  ✔ rechaza una cita con fecha en el pasado (0.264496ms)
+  ✔ rechaza una cita para una mascota no registrada (0.264626ms)
+  ✔ rechaza una cita con un veterinario inexistente (0.218745ms)
+  ✔ permite citas contiguas: el fin de una es el inicio de la otra (0.561783ms)
+  ✔ detecta el choque cuando la nueva cita envuelve por completo a una existente (0.58372ms)
+  ✔ permite agendar con otro veterinario a la misma hora (0.530347ms)
+  ✔ impide que la misma mascota tenga dos citas simultáneas con veterinarios distintos (0.618811ms)
+  ✔ rechaza duraciones fuera de 15 a 120 minutos o que no sean múltiplo de 15 (0.87228ms)
+  ✔ genera un enlace de videollamada cuando la cita es de telemedicina (0.385386ms)
+  ✔ publica el evento appointment.scheduled para que otros módulos reaccionen (0.350836ms)
+✔ agendarCita (ScheduleAppointment) (11.76211ms)
+▶ Arquitectura del monolito modular
+  ✔ un módulo solo importa de otro módulo a través de su public.ts (4.133342ms)
+  ✔ la capa de dominio no depende de aplicación, infraestructura ni Express (0.403675ms)
+  ✔ dominio y aplicación no usan `new Date()` sin argumentos (se inyecta Clock) (0.581013ms)
+  ✔ ningún archivo de src usa el tipo any (1.674851ms)
+✔ Arquitectura del monolito modular (8.106544ms)
+▶ API HTTP de VetSync (integración)
+  ✔ GET /api/health responde ok (55.272873ms)
+  ✔ flujo completo: registrar, agendar, chocar, confirmar, recordar y cancelar (63.712964ms)
+  ✔ historial médico vía HTTP y perfil de la mascota (12.136182ms)
+  ✔ traduce errores a códigos HTTP: 400 validación, 404 inexistente, 400 JSON inválido, 404 ruta (6.045504ms)
+✔ API HTTP de VetSync (integración) (143.168835ms)
+▶ Middleware de errores
+  ✔ un error inesperado responde 500 genérico, sin stack, y se reporta (0.465821ms)
+  ✔ un cuerpo demasiado grande responde 413 (0.196547ms)
+✔ Middleware de errores (0.88336ms)
+▶ Datos de demostración
+  ✔ el seed carga veterinarios, mascotas y citas válidas sin choques (1.926771ms)
+✔ Datos de demostración (2.190005ms)
+(node:3689) ExperimentalWarning: The MockTimers API is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+▶ Recordatorios de citas próximas (correo simulado)
+  ✔ envía un recordatorio al dueño cuando la cita empieza dentro de las próximas 24 h (23.932327ms)
+  ✔ no envía recordatorios de citas que empiezan después de la ventana de 24 h (0.312362ms)
+  ✔ es idempotente: dos corridas seguidas envían un solo correo por cita (0.541241ms)
+  ✔ si el envío falla lo reporta, sigue con las demás y lo reintenta en la siguiente corrida (1.132237ms)
+  ✔ omite y reporta la cita cuando no encuentra el contacto del dueño (0.352009ms)
+  ✔ incluye el enlace de la videollamada cuando la cita es de telemedicina (0.466269ms)
+✔ Recordatorios de citas próximas (correo simulado) (28.101132ms)
+▶ Rendimiento de los recordatorios
+  ✔ no hace consultas N+1: un veterinario y una mascota repetidos se consultan una sola vez por corrida (1.247531ms)
+✔ Rendimiento de los recordatorios (1.607192ms)
+▶ Confirmación al agendar
+  ✔ envía un correo de confirmación cuando se publica appointment.scheduled (0.717304ms)
+  ✔ lanza un error (que el bus reporta) si no hay contacto para la mascota (0.706696ms)
+✔ Confirmación al agendar (1.747021ms)
+▶ Infraestructura de notificaciones
+  ✔ el correo simulado guarda los mensajes en una bandeja, del más nuevo al más viejo (0.61345ms)
+  ✔ la bandeja simulada no crece sin límite (descarta los correos más viejos) (0.249308ms)
+  ✔ el programador ejecuta los recordatorios periódicamente y se puede detener (14.752685ms)
+✔ Infraestructura de notificaciones (15.856315ms)
+▶ Registro de dueños
+  ✔ registra un dueño y normaliza el correo a minúsculas (1.35826ms)
+  ✔ rechaza un correo ya registrado (0.551778ms)
+  ✔ valida la entrada en el borde: correo inválido y nombre vacío (0.33081ms)
+✔ Registro de dueños (3.056965ms)
+▶ Registro de mascotas
+  ✔ registra una mascota de un dueño existente (0.384039ms)
+  ✔ rechaza una mascota cuyo dueño no existe (0.224645ms)
+  ✔ rechaza una fecha de nacimiento en el futuro (0.388362ms)
+✔ Registro de mascotas (1.555537ms)
+▶ Historial médico
+  ✔ agrega registros y devuelve el historial del más reciente al más antiguo (1.433821ms)
+  ✔ rechaza un registro para una mascota inexistente (0.328234ms)
+  ✔ no permite registrar consultas con fecha futura (0.251409ms)
+  ✔ getPetProfile lanza PET_NOT_FOUND si la mascota no existe (0.382106ms)
+✔ Historial médico (2.703131ms)
+▶ API pública del módulo de pacientes
+  ✔ expone solo existencia de mascota y contacto del dueño (0.527727ms)
+✔ API pública del módulo de pacientes (0.607992ms)
+▶ KeyedMutex
+  ✔ serializa tareas con la misma llave (6.646796ms)
+  ✔ permite paralelismo entre llaves distintas (1.198362ms)
+  ✔ libera la llave aunque la tarea falle y no se interbloquea con llaves cruzadas (1.068583ms)
+✔ KeyedMutex (9.932113ms)
+▶ InMemoryEventBus
+  ✔ entrega el evento a todos los suscriptores y reporta (sin propagar) los que fallan (0.433558ms)
+✔ InMemoryEventBus (0.62986ms)
+▶ Veterinarios
+  ✔ registra un veterinario y lo expone por la API pública (0.964312ms)
+  ✔ rechaza correos duplicados y campos vacíos (0.608463ms)
+✔ Veterinarios (2.379679ms)
+ℹ tests 59
+ℹ suites 19
+ℹ pass 59
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1598.625917

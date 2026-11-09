@@ -53,7 +53,11 @@ export function AgendaView({ directory }: { directory: Directory }) {
         modality,
         reason,
       });
-      setNotice({ kind: 'ok', text: `Cita agendada para las ${formatTime(created.startsAt)}. Se envió la confirmación por correo (simulado).` });
+      setNotice({
+        kind: 'ok',
+        // formatTime ya termina en "p.m."/"a.m.": no agregar otro punto después.
+        text: `Cita agendada a las ${formatTime(created.startsAt)} — se envió la confirmación por correo (simulado)`,
+      });
       setReason('');
       setDay(toDateInput(new Date(created.startsAt)));
       await loadDay();

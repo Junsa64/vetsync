@@ -29,7 +29,7 @@ una regla, se rechaza aunque "funcione".
 - Un módulo **solo** puede importar de otro módulo a través de su `public.ts`.
   Existe una prueba de arquitectura que falla si se rompe esta regla.
 - La única pieza que conoce todas las implementaciones concretas es la raíz de
-  composición `backend/src/main.ts` (`container.ts`).
+  composición `backend/src/container.ts` (`main.ts` solo arranca el servidor).
 
 ## 4. SOLID (obligatorio)
 

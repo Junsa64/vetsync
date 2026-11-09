@@ -96,7 +96,7 @@ p { margin: 4px 0; }
 .form { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
 .form label { display: flex; flex-direction: column; gap: 4px; font-size: 0.82rem; color: var(--muted); }
 .form .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.form .row-time { grid-template-columns: minmax(0, 1fr) 104px; }
+.form .row-time { grid-template-columns: 1fr; }
 input, select, textarea {
   font: inherit; font-size: 0.92rem; color: var(--ink); background: var(--surface);
   border: 1px solid var(--line); border-radius: 10px; padding: 9px 10px; width: 100%;
